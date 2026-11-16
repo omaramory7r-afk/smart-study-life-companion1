@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: smart-study-life-companion
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: SSC_AUTH_SECRET
+        generateValue: true
+      - key: SSC_DATABASE_PATH
+        value: /var/data/schedule.db
+    disk:
+      name: ssc-data
+      mountPath: /var/data
+      sizeGB: 1
